@@ -14,7 +14,29 @@ function App() {
     phone: '',
     instagram_handle: '@rentalsbymilly',
     logo_url: '',
-    thank_you_message: 'Thank you for your business! We look forward to making your event unforgettable.',
+    thank_you_message: `Terms & Conditions:
+⦁Payment validates the order.
+⦁Customers are liable for damage or loss of items after delivery.
+⦁Payment of damages or loss items must be done within 4 days from the date the damage or    loss occurred.
+⦁ A fee of 1,000 naira will be paid for a damaged or lost napkin.
+⦁ A fee of 1,500 naira will be paid for a damaged or lost cutlery
+⦁A fee of 2,500 naira will be paid for a damaged or lost glass/tea cup.
+⦁ A fee of 5,000 naira will be paid for a damaged or lost plate.
+⦁ A fee of 5,000 naira will be paid for a damaged or lost charger plate.
+⦁ A fee of 6,000 naira will be paid for a damaged or lost goblet cups.
+⦁ A fee of 7,000 naira will be paid for a damaged or lost detailing vases.
+⦁ A fee of 10,000 naira will be paid for a damaged or lost cylinder vase.
+⦁ A fee of 10,000 naira will be paid for a damaged or lost crystal candle stand.
+⦁A fee of 15,000 naira will be paid for a damaged or lost table cover.
+⦁ A fee of 25,000 naira will be paid for a damaged or lost fish bowl vase
+⦁A fee of 110,000 naira will be paid for a damaged or lost LED numbers.
+⦁Damage on gazebos require replacement.
+⦁Damage on rugs, carpets, turfs require replacement.
+⦁Damage on flowerpots require replacement.
+⦁Damage on fan require replacement.
+⦁Damage or loss of any other rented item requires replacement.
+⦁Based on delivery, client/staff must be present to confirm your order at the delivery point.
+⦁NO REFUND AFTER PAYMENT.`,
   });
 
   const [formData, setFormData] = useState<InvoiceFormData>({
@@ -56,9 +78,6 @@ function App() {
         instagram_handle: data.instagram_handle,
         logo_url: data.logo_url,
         thank_you_message: data.thank_you_message,
-        bank_name: data.bank_name,
-        account_number: data.account_number,
-        account_holder_name: data.account_holder_name,
       });
     }
   };
@@ -96,9 +115,6 @@ function App() {
           instagram_handle: info.instagram_handle,
           logo_url: info.logo_url,
           thank_you_message: info.thank_you_message,
-          bank_name: info.bank_name,
-          account_number: info.account_number,
-          account_holder_name: info.account_holder_name,
           updated_at: new Date().toISOString(),
         })
         .eq('id', existing.id);
@@ -110,9 +126,6 @@ function App() {
         instagram_handle: info.instagram_handle,
         logo_url: info.logo_url,
         thank_you_message: info.thank_you_message,
-        bank_name: info.bank_name,
-        account_number: info.account_number,
-        account_holder_name: info.account_holder_name,
       });
     }
 
@@ -132,7 +145,9 @@ function App() {
     }
 
     const subtotal = formData.items.reduce((sum, item) => sum + item.total_price, 0);
-    const total = subtotal - formData.discount + formData.delivery_fee + formData.refundable_caution_fee;
+    const revenueTotal = subtotal - formData.discount + formData.delivery_fee;
+
+    const totalPayable =  revenueTotal + formData.refundable_caution_fee;
 
     try {
       if (currentInvoiceId) {
@@ -147,7 +162,8 @@ function App() {
             discount: formData.discount,
             delivery_fee: formData.delivery_fee,
             refundable_caution_fee: formData.refundable_caution_fee,
-            total,
+            total: revenueTotal,
+            total_payable: totalPayable,
             updated_at: new Date().toISOString(),
           })
           .eq('id', currentInvoiceId);
@@ -182,7 +198,8 @@ function App() {
             discount: formData.discount,
             delivery_fee: formData.delivery_fee,
             refundable_caution_fee: formData.refundable_caution_fee,
-            total,
+            total: revenueTotal,
+            total_payable: totalPayable,
           })
           .select()
           .single();
@@ -233,7 +250,7 @@ function App() {
         })),
         discount: invoice.discount,
         delivery_fee: invoice.delivery_fee,
-        refundable_caution_fee: invoice.refundable_caution_fee || 0,
+        refundable_caution_fee: invoice.refundable_caution_fee,
       });
       setInvoiceNumber(invoice.invoice_number);
       setCurrentInvoiceId(invoice.id);
@@ -391,7 +408,7 @@ function App() {
                           <p className="text-sm text-gray-600">{invoice.event_location}</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold text-lg">₦{invoice.total.toFixed(2)}</p>
+                          <p className="font-bold text-lg">₦{(invoice.total + invoice.refundable_caution_fee).toFixed(2)}</p>
                           <p className="text-sm text-gray-600">
                             {new Date(invoice.event_date).toLocaleDateString()}
                           </p>
