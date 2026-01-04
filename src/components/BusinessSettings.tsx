@@ -9,7 +9,12 @@ interface BusinessSettingsProps {
 }
 
 export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSettingsProps) {
-  const [formData, setFormData] = useState<BusinessInfo>(businessInfo);
+  const [formData, setFormData] = useState<BusinessInfo>({
+    ...businessInfo,
+    account_holder_name: businessInfo.account_holder_name || 'Mwuese Olukoya',
+    account_number: businessInfo.account_number || '4098343017',
+    bank_name: businessInfo.bank_name || 'Fcmb',
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

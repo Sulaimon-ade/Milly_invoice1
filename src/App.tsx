@@ -25,6 +25,7 @@ function App() {
     items: [],
     discount: 0,
     delivery_fee: 0,
+    refundable_caution_fee: 0,
   });
 
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -55,6 +56,9 @@ function App() {
         instagram_handle: data.instagram_handle,
         logo_url: data.logo_url,
         thank_you_message: data.thank_you_message,
+        bank_name: data.bank_name,
+        account_number: data.account_number,
+        account_holder_name: data.account_holder_name,
       });
     }
   };
@@ -92,6 +96,9 @@ function App() {
           instagram_handle: info.instagram_handle,
           logo_url: info.logo_url,
           thank_you_message: info.thank_you_message,
+          bank_name: info.bank_name,
+          account_number: info.account_number,
+          account_holder_name: info.account_holder_name,
           updated_at: new Date().toISOString(),
         })
         .eq('id', existing.id);
@@ -103,6 +110,9 @@ function App() {
         instagram_handle: info.instagram_handle,
         logo_url: info.logo_url,
         thank_you_message: info.thank_you_message,
+        bank_name: info.bank_name,
+        account_number: info.account_number,
+        account_holder_name: info.account_holder_name,
       });
     }
 
@@ -122,7 +132,7 @@ function App() {
     }
 
     const subtotal = formData.items.reduce((sum, item) => sum + item.total_price, 0);
-    const total = subtotal - formData.discount + formData.delivery_fee;
+    const total = subtotal - formData.discount + formData.delivery_fee + formData.refundable_caution_fee;
 
     try {
       if (currentInvoiceId) {
@@ -136,6 +146,7 @@ function App() {
             subtotal,
             discount: formData.discount,
             delivery_fee: formData.delivery_fee,
+            refundable_caution_fee: formData.refundable_caution_fee,
             total,
             updated_at: new Date().toISOString(),
           })
@@ -170,6 +181,7 @@ function App() {
             subtotal,
             discount: formData.discount,
             delivery_fee: formData.delivery_fee,
+            refundable_caution_fee: formData.refundable_caution_fee,
             total,
           })
           .select()
@@ -221,6 +233,7 @@ function App() {
         })),
         discount: invoice.discount,
         delivery_fee: invoice.delivery_fee,
+        refundable_caution_fee: invoice.refundable_caution_fee || 0,
       });
       setInvoiceNumber(invoice.invoice_number);
       setCurrentInvoiceId(invoice.id);
@@ -237,6 +250,7 @@ function App() {
       items: [],
       discount: 0,
       delivery_fee: 0,
+      refundable_caution_fee: 0,
     });
     setCurrentInvoiceId(null);
     generateInvoiceNumber();

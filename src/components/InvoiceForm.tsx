@@ -195,7 +195,7 @@ export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Discount (₦)
+              Discount ($)
             </label>
             <input
               type="number"
@@ -209,7 +209,7 @@ export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Delivery Fee (₦)
+              Delivery Fee ($)
             </label>
             <input
               type="number"
@@ -217,6 +217,20 @@ export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
               step="0.01"
               value={formData.delivery_fee}
               onChange={(e) => updateField('delivery_fee', parseFloat(e.target.value) || 0)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="0.00"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Refundable Caution Fee ($)
+            </label>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={formData.refundable_caution_fee}
+              onChange={(e) => updateField('refundable_caution_fee', parseFloat(e.target.value) || 0)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="0.00"
             />

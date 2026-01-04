@@ -14,6 +14,7 @@ export interface InvoiceFormData {
   items: InvoiceFormItem[];
   discount: number;
   delivery_fee: number;
+  refundable_caution_fee: number;
 }
 
 export interface BusinessInfo {

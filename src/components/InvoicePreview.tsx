@@ -10,7 +10,7 @@ interface InvoicePreviewProps {
 export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
   ({ invoiceNumber, invoiceData, businessInfo }, ref) => {
     const subtotal = invoiceData.items.reduce((sum, item) => sum + item.total_price, 0);
-    const total = subtotal - invoiceData.discount + invoiceData.delivery_fee;
+    const total = subtotal - invoiceData.discount + invoiceData.delivery_fee + invoiceData.refundable_caution_fee;
 
     return (
       <div ref={ref} className="bg-white p-12 shadow-2xl max-w-4xl mx-auto">
@@ -123,6 +123,12 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               <div className="flex justify-between py-2 text-gray-700">
                 <span>Delivery Fee:</span>
                 <span className="font-semibold">₦{invoiceData.delivery_fee.toFixed(2)}</span>
+              </div>
+            )}
+            {invoiceData.refundable_caution_fee > 0 && (
+              <div className="flex justify-between py-2 bg-yellow-50 px-3 py-2 rounded border-l-4 border-yellow-400">
+                <span className="font-bold text-yellow-900">Refundable Caution Fee:</span>
+                <span className="font-bold text-yellow-700">₦{invoiceData.refundable_caution_fee.toFixed(2)}</span>
               </div>
             )}
             <div className="border-t-2 border-purple-600 mt-2 pt-3 flex justify-between text-xl">
