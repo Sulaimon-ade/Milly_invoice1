@@ -171,6 +171,17 @@ export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSett
             />
           </div>
 
+          <div className="border-t border-gray-200 pt-4 mt-4">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">Terms & Conditions</h3>
+            <textarea
+              value={formData.terms_and_conditions || ''}
+              onChange={(e) => updateField('terms_and_conditions', e.target.value)}
+              rows={8}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-xs"
+              placeholder="Enter your terms and conditions here..."
+            />
+          </div>
+
           <div className="flex gap-3 pt-4">
             <button
               type="submit"

@@ -164,6 +164,17 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
           </div>
         )}
 
+        {businessInfo.terms_and_conditions && (
+          <details className="mb-6 md:mb-8">
+            <summary className="cursor-pointer text-xs md:text-sm font-semibold text-gray-700 p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+              Terms & Conditions
+            </summary>
+            <div className="mt-3 p-3 md:p-4 bg-gray-50 rounded-lg border border-gray-200 text-xs md:text-sm text-gray-700 whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto">
+              {businessInfo.terms_and_conditions}
+            </div>
+          </details>
+        )}
+
         <div className="border-t-2 border-gray-200 pt-4 md:pt-6 text-center">
           <p className="text-gray-700 mb-2 text-sm md:text-base">{businessInfo.thank_you_message}</p>
           <p className="text-purple-600 font-medium text-sm md:text-base">{businessInfo.instagram_handle}</p>
