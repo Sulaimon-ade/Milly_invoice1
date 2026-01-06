@@ -169,7 +169,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             <summary className="cursor-pointer text-xs md:text-sm font-semibold text-gray-700 p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
               Terms & Conditions
             </summary>
-            <div className="mt-3 p-3 md:p-4 bg-gray-50 rounded-lg border border-gray-200 text-xs md:text-sm text-gray-700 whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto">
+            <div className="mt-3 p-3 md:p-4 bg-gray-50 rounded-lg border border-gray-200 text-xs md:text-sm text-gray-700 whitespace-pre-wrap leading-relaxed columns-2 gap-4 print:columns-2 print:gap-4">
               {businessInfo.terms_and_conditions}
             </div>
           </details>
