@@ -9,8 +9,17 @@ interface InvoicePreviewProps {
 
 export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
   ({ invoiceNumber, invoiceData, businessInfo }, ref) => {
-    const subtotal = invoiceData.items.reduce((sum, item) => sum + item.total_price, 0);
-    const total = subtotal - invoiceData.discount + invoiceData.delivery_fee + invoiceData.refundable_caution_fee;
+  const subtotal = invoiceData.items.reduce((sum, item) => sum + item.total_price, 0);
+
+    const VAT_RATE = 0.075;
+    const vat = subtotal * VAT_RATE;
+
+    const total =
+      subtotal +
+      vat -
+      invoiceData.discount +
+      invoiceData.delivery_fee +
+      invoiceData.refundable_caution_fee;
 
     return (
       <div ref={ref} className="bg-white p-12 shadow-2xl max-w-4xl mx-auto">
@@ -112,6 +121,10 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
             <div className="flex justify-between py-2 text-gray-700">
               <span>Subtotal:</span>
               <span className="font-semibold">₦{subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between py-2 text-gray-700">
+              <span>VAT (7.5%):</span>
+              <span className="font-semibold">₦{vat.toFixed(2)}</span>
             </div>
             {invoiceData.discount > 0 && (
               <div className="flex justify-between py-2 text-purple-600">
