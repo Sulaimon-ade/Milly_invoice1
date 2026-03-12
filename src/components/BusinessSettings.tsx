@@ -10,11 +10,16 @@ interface BusinessSettingsProps {
 
 export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSettingsProps) {
   const [formData, setFormData] = useState<BusinessInfo>({
-    ...businessInfo,
-    account_holder_name: businessInfo.account_holder_name || 'Mwuese Olukoya',
-    account_number: businessInfo.account_number || '4098343017',
-    bank_name: businessInfo.bank_name || 'Fcmb',
-  });
+  ...businessInfo,
+
+  business_account_holder_name: businessInfo.business_account_holder_name || '',
+  business_account_number: businessInfo.business_account_number || '',
+  business_bank_name: businessInfo.business_bank_name || '',
+
+  personal_account_holder_name: businessInfo.personal_account_holder_name || '',
+  personal_account_number: businessInfo.personal_account_number || '',
+  personal_bank_name: businessInfo.personal_bank_name || '',
+});
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,49 +119,72 @@ export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSett
             />
           </div>
 
-          <div className="border-t border-gray-200 pt-4 mt-4">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">Bank Account Details (Optional)</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Bank Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.bank_name || ''}
-                  onChange={(e) => updateField('bank_name', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="GTBank"
-                />
-              </div>
+    <div className="border-t border-gray-200 pt-4 mt-4">
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Account Holder Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.account_holder_name || ''}
-                  onChange={(e) => updateField('account_holder_name', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="Milly Okonkwo"
-                />
-              </div>
+      <h3 className="text-sm font-semibold text-gray-900 mb-4">
+        Business Account
+      </h3>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Account Number
-                </label>
-                <input
-                  type="text"
-                  value={formData.account_number || ''}
-                  onChange={(e) => updateField('account_number', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="0123456789"
-                />
-              </div>
-            </div>
-          </div>
+      <div className="space-y-4">
+
+        <input
+          type="text"
+          value={formData.business_bank_name || ''}
+          onChange={(e) => updateField('business_bank_name', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          placeholder="Business Bank Name"
+        />
+
+        <input
+          type="text"
+          value={formData.business_account_holder_name || ''}
+          onChange={(e) => updateField('business_account_holder_name', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          placeholder="Business Account Holder"
+        />
+
+        <input
+          type="text"
+          value={formData.business_account_number || ''}
+          onChange={(e) => updateField('business_account_number', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          placeholder="Business Account Number"
+        />
+
+      </div>
+
+      <h3 className="text-sm font-semibold text-gray-900 mt-6 mb-4">
+        Personal Account
+      </h3>
+
+      <div className="space-y-4">
+
+        <input
+          type="text"
+          value={formData.personal_bank_name || ''}
+          onChange={(e) => updateField('personal_bank_name', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          placeholder="Personal Bank Name"
+        />
+
+        <input
+          type="text"
+          value={formData.personal_account_holder_name || ''}
+          onChange={(e) => updateField('personal_account_holder_name', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          placeholder="Personal Account Holder"
+        />
+
+        <input
+          type="text"
+          value={formData.personal_account_number || ''}
+          onChange={(e) => updateField('personal_account_number', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          placeholder="Personal Account Number"
+        />
+
+      </div>
+    </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">

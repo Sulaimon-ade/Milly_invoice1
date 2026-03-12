@@ -24,8 +24,16 @@ export interface BusinessInfo {
   instagram_handle: string;
   logo_url: string;
   thank_you_message: string;
-  bank_name?: string;
-  account_number?: string;
-  account_holder_name?: string;
+
+  // Business Account
+  business_bank_name?: string;
+  business_account_number?: string;
+  business_account_holder_name?: string;
+
+  // Personal Account
+  personal_bank_name?: string;
+  personal_account_number?: string;
+  personal_account_holder_name?: string;
+
   terms_and_conditions?: string;
 }
