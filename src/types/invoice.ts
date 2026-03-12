@@ -25,15 +25,15 @@ export interface BusinessInfo {
   logo_url: string;
   thank_you_message: string;
 
-  // Business Account
-  business_bank_name?: string;
-  business_account_number?: string;
-  business_account_holder_name?: string;
-
   // Personal Account
   personal_bank_name?: string;
   personal_account_number?: string;
   personal_account_holder_name?: string;
+
+  // Business Account
+  business_bank_name?: string;
+  business_account_number?: string;
+  business_account_holder_name?: string;
 
   terms_and_conditions?: string;
 }

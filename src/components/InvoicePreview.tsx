@@ -160,7 +160,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
 
       {businessInfo.business_account_number && (
         <div>
-          <p className="font-semibold text-purple-700">Business Account</p>
+          <p className="font-semibold text-purple-700">Personal Account</p>
           <p>{businessInfo.business_account_holder_name}</p>
           <p>{businessInfo.business_bank_name}</p>
           <p className="font-mono">{businessInfo.business_account_number}</p>
@@ -169,7 +169,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
 
       {businessInfo.personal_account_number && (
         <div>
-          <p className="font-semibold text-purple-700">Personal Account</p>
+          <p className="font-semibold text-purple-700">Business Account</p>
           <p>{businessInfo.personal_account_holder_name}</p>
           <p>{businessInfo.personal_bank_name}</p>
           <p className="font-mono">{businessInfo.personal_account_number}</p>

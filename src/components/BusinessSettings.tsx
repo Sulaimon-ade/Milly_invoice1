@@ -122,7 +122,7 @@ export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSett
     <div className="border-t border-gray-200 pt-4 mt-4">
 
       <h3 className="text-sm font-semibold text-gray-900 mb-4">
-        Business Account
+        Personal Account
       </h3>
 
       <div className="space-y-4">
@@ -132,7 +132,7 @@ export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSett
           value={formData.business_bank_name || ''}
           onChange={(e) => updateField('business_bank_name', e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-          placeholder="Business Bank Name"
+          placeholder="Personal Bank Name"
         />
 
         <input
@@ -140,7 +140,7 @@ export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSett
           value={formData.business_account_holder_name || ''}
           onChange={(e) => updateField('business_account_holder_name', e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-          placeholder="Business Account Holder"
+          placeholder="Personal Account Holder"
         />
 
         <input
@@ -148,13 +148,13 @@ export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSett
           value={formData.business_account_number || ''}
           onChange={(e) => updateField('business_account_number', e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-          placeholder="Business Account Number"
+          placeholder="Personal Account Number"
         />
 
       </div>
 
       <h3 className="text-sm font-semibold text-gray-900 mt-6 mb-4">
-        Personal Account
+        Business Account
       </h3>
 
       <div className="space-y-4">
@@ -164,7 +164,7 @@ export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSett
           value={formData.personal_bank_name || ''}
           onChange={(e) => updateField('personal_bank_name', e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-          placeholder="Personal Bank Name"
+          placeholder="Business Bank Name"
         />
 
         <input
@@ -172,7 +172,7 @@ export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSett
           value={formData.personal_account_holder_name || ''}
           onChange={(e) => updateField('personal_account_holder_name', e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-          placeholder="Personal Account Holder"
+          placeholder="Business Account Holder"
         />
 
         <input
@@ -180,7 +180,7 @@ export function BusinessSettings({ businessInfo, onSave, onClose }: BusinessSett
           value={formData.personal_account_number || ''}
           onChange={(e) => updateField('personal_account_number', e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-          placeholder="Personal Account Number"
+          placeholder="Business Account Number"
         />
 
       </div>
