@@ -1,27 +1,37 @@
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import type { InvoiceFormData, BusinessInfo } from '../types/invoice';
 
 interface InvoicePreviewProps {
   invoiceNumber: string;
   invoiceData: InvoiceFormData;
   businessInfo: BusinessInfo;
+  onAccountChange?: (account: number) => void;
 }
 
 export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
-  ({ invoiceNumber, invoiceData, businessInfo }, ref) => {
-  const subtotal = invoiceData.items.reduce((sum, item) => sum + item.total_price, 0);
+  ({ invoiceNumber, invoiceData, businessInfo, onAccountChange }, ref) => {
+    const [selectedAccount, setSelectedAccount] = useState<number>(invoiceData.selected_account || 1);
+    const subtotal = invoiceData.items.reduce((sum, item) => sum + item.total_price, 0);
+    const total = subtotal - invoiceData.discount + invoiceData.delivery_fee + invoiceData.refundable_caution_fee;
 
-    const VAT_RATE = 0.075;
-    const vat = subtotal * VAT_RATE;
+    const handleAccountChange = (account: number) => {
+      setSelectedAccount(account);
+      onAccountChange?.(account);
+    };
 
-    const total =
-      subtotal +
-      vat -
-      invoiceData.discount +
-      invoiceData.delivery_fee +
-      invoiceData.refundable_caution_fee;
+    const hasMultipleAccounts = !!(businessInfo.account2_bank_name || businessInfo.account2_number || businessInfo.account2_holder_name);
+    const currentAccount = selectedAccount === 2 ? {
+      holder: businessInfo.account2_holder_name,
+      bank: businessInfo.account2_bank_name,
+      number: businessInfo.account2_number,
+    } : {
+      holder: businessInfo.account_holder_name,
+      bank: businessInfo.bank_name,
+      number: businessInfo.account_number,
+    };
 
     return (
+      <>
       <div ref={ref} className="bg-white p-12 shadow-2xl max-w-4xl mx-auto">
         <div className="border-b-4 border-purple-600 pb-8 mb-8">
           <div className="flex justify-between items-start">
@@ -122,10 +132,6 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               <span>Subtotal:</span>
               <span className="font-semibold">₦{subtotal.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between py-2 text-gray-700">
-              <span>VAT (7.5%):</span>
-              <span className="font-semibold">₦{vat.toFixed(2)}</span>
-            </div>
             {invoiceData.discount > 0 && (
               <div className="flex justify-between py-2 text-purple-600">
                 <span>Discount:</span>
@@ -151,43 +157,56 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
           </div>
         </div>
 
-<div className="mb-6 md:mb-8 bg-gray-50 p-4 md:p-6 rounded-lg border-l-4 border-gray-400">
-  <h3 className="text-xs md:text-sm font-semibold text-gray-900 mb-3 uppercase">
-    Payment Accounts
-  </h3>
-
-    <div className="space-y-4 text-xs md:text-sm text-gray-700">
-
-      {businessInfo.business_account_number && (
-        <div>
-          <p className="font-semibold text-purple-700">Account 1</p>
-          <p>{businessInfo.business_account_holder_name}</p>
-          <p>{businessInfo.business_bank_name}</p>
-          <p className="font-mono">{businessInfo.business_account_number}</p>
-        </div>
-      )}
-
-      {businessInfo.personal_account_number && (
-        <div>
-          <p className="font-semibold text-purple-700">Account 2</p>
-          <p>{businessInfo.personal_account_holder_name}</p>
-          <p>{businessInfo.personal_bank_name}</p>
-          <p className="font-mono">{businessInfo.personal_account_number}</p>
-        </div>
-      )}
-
-    </div>
-  </div>
-
-        {businessInfo.terms_and_conditions && (
-          <details className="mb-6 md:mb-8">
-            <summary className="cursor-pointer text-xs md:text-sm font-semibold text-gray-700 p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-              Terms & Conditions
-            </summary>
-            <div className="mt-3 p-3 md:p-4 bg-gray-50 rounded-lg border border-gray-200 text-xs md:text-sm text-gray-700 whitespace-pre-wrap leading-relaxed columns-2 gap-4 print:columns-2 print:gap-4">
-              {businessInfo.terms_and_conditions}
+        {(currentAccount.bank || currentAccount.number || currentAccount.holder) && (
+          <div className="mb-6 md:mb-8 bg-gray-50 p-4 md:p-6 rounded-lg border-l-4 border-gray-400">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-xs md:text-sm font-semibold text-gray-900 uppercase">Bank Details</h3>
+              {hasMultipleAccounts && (
+                <div className="print:hidden flex gap-2">
+                  <button
+                    onClick={() => handleAccountChange(1)}
+                    className={`px-3 py-1 text-xs rounded font-medium transition-colors ${
+                      selectedAccount === 1
+                        ? 'bg-purple-600 text-white'
+                        : 'bg-white border border-gray-300 text-gray-700 hover:border-purple-400'
+                    }`}
+                  >
+                    Account 1
+                  </button>
+                  <button
+                    onClick={() => handleAccountChange(2)}
+                    className={`px-3 py-1 text-xs rounded font-medium transition-colors ${
+                      selectedAccount === 2
+                        ? 'bg-purple-600 text-white'
+                        : 'bg-white border border-gray-300 text-gray-700 hover:border-purple-400'
+                    }`}
+                  >
+                    Account 2
+                  </button>
+                </div>
+              )}
             </div>
-          </details>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 text-gray-700 text-xs md:text-sm">
+              {currentAccount.holder && (
+                <div>
+                  <p className="text-gray-500 font-medium">Account Holder</p>
+                  <p className="font-semibold">{currentAccount.holder}</p>
+                </div>
+              )}
+              {currentAccount.bank && (
+                <div>
+                  <p className="text-gray-500 font-medium">Bank</p>
+                  <p className="font-semibold">{currentAccount.bank}</p>
+                </div>
+              )}
+              {currentAccount.number && (
+                <div>
+                  <p className="text-gray-500 font-medium">Account Number</p>
+                  <p className="font-semibold font-mono">{currentAccount.number}</p>
+                </div>
+              )}
+            </div>
+          </div>
         )}
 
         <div className="border-t-2 border-gray-200 pt-4 md:pt-6 text-center">
@@ -195,6 +214,45 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
           <p className="text-purple-600 font-medium text-sm md:text-base">{businessInfo.instagram_handle}</p>
         </div>
       </div>
+
+      {businessInfo.terms_and_conditions && (
+        <div className="bg-white p-12 shadow-2xl max-w-4xl mx-auto break-before-page">
+          <div className="mb-12">
+            <div className="flex items-center justify-center mb-8">
+              <div className="flex-1 border-b-2 border-purple-600"></div>
+              <h1 className="text-4xl font-bold text-purple-700 mx-8">Terms & Conditions</h1>
+              <div className="flex-1 border-b-2 border-purple-600"></div>
+            </div>
+            <p className="text-center text-gray-500 text-sm mb-8">{businessInfo.business_name}</p>
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-50 to-gray-50 p-8 rounded-xl border border-purple-100">
+            <div className="columns-2 gap-6 text-gray-700 text-sm leading-relaxed break-inside-avoid-column">
+              {businessInfo.terms_and_conditions.split('\n\n').map((paragraph, index) => (
+                <p key={index} className="text-justify mb-4 font-light tracking-wide">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-12 flex items-end gap-12">
+            <div className="flex-1">
+              <p className="text-gray-500 text-xs mb-6">Client Signature</p>
+              <div className="border-b-2 border-gray-400 h-12"></div>
+            </div>
+            <div className="flex-1">
+              <p className="text-gray-500 text-xs mb-6">Date</p>
+              <div className="border-b-2 border-gray-400 h-12"></div>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <p className="text-purple-600 font-medium text-sm">{businessInfo.instagram_handle}</p>
+          </div>
+        </div>
+      )}
+    </>
     );
   }
 );

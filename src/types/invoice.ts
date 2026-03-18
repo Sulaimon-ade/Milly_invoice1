@@ -15,6 +15,13 @@ export interface InvoiceFormData {
   discount: number;
   delivery_fee: number;
   refundable_caution_fee: number;
+  selected_account?: number;
+}
+
+export interface BankAccount {
+  bank_name: string;
+  account_holder_name: string;
+  account_number: string;
 }
 
 export interface BusinessInfo {
@@ -24,16 +31,11 @@ export interface BusinessInfo {
   instagram_handle: string;
   logo_url: string;
   thank_you_message: string;
-
-  // Personal Account
-  personal_bank_name?: string;
-  personal_account_number?: string;
-  personal_account_holder_name?: string;
-
-  // Business Account
-  business_bank_name?: string;
-  business_account_number?: string;
-  business_account_holder_name?: string;
-
+  bank_name?: string;
+  account_number?: string;
+  account_holder_name?: string;
+  account2_bank_name?: string;
+  account2_number?: string;
+  account2_holder_name?: string;
   terms_and_conditions?: string;
 }
