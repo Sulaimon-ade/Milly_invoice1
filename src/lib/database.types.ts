@@ -10,6 +10,13 @@ export interface Database {
           instagram_handle: string;
           logo_url: string;
           thank_you_message: string;
+          bank_name?: string;
+          account_holder_name?: string;
+          account_number?: string;
+          account2_bank_name?: string;
+          account2_holder_name?: string;
+          account2_number?: string;
+          terms_and_conditions?: string;
           created_at: string;
           updated_at: string;
         };
@@ -27,7 +34,9 @@ export interface Database {
           subtotal: number;
           discount: number;
           delivery_fee: number;
+          refundable_caution_fee?: number;
           total: number;
+          selected_account?: number;
           created_at: string;
           updated_at: string;
         };

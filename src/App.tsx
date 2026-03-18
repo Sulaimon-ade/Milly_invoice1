@@ -60,6 +60,9 @@ function App() {
         bank_name: data.bank_name,
         account_number: data.account_number,
         account_holder_name: data.account_holder_name,
+        account2_bank_name: data.account2_bank_name,
+        account2_number: data.account2_number,
+        account2_holder_name: data.account2_holder_name,
         terms_and_conditions: data.terms_and_conditions,
       });
     }
@@ -101,6 +104,9 @@ function App() {
           bank_name: info.bank_name,
           account_number: info.account_number,
           account_holder_name: info.account_holder_name,
+          account2_bank_name: info.account2_bank_name,
+          account2_number: info.account2_number,
+          account2_holder_name: info.account2_holder_name,
           terms_and_conditions: info.terms_and_conditions,
           updated_at: new Date().toISOString(),
         })
@@ -116,6 +122,9 @@ function App() {
         bank_name: info.bank_name,
         account_number: info.account_number,
         account_holder_name: info.account_holder_name,
+        account2_bank_name: info.account2_bank_name,
+        account2_number: info.account2_number,
+        account2_holder_name: info.account2_holder_name,
         terms_and_conditions: info.terms_and_conditions,
       });
     }
@@ -152,6 +161,7 @@ function App() {
             delivery_fee: formData.delivery_fee,
             refundable_caution_fee: formData.refundable_caution_fee,
             total,
+            selected_account: formData.selected_account || 1,
             updated_at: new Date().toISOString(),
           })
           .eq('id', currentInvoiceId);
@@ -187,6 +197,7 @@ function App() {
             delivery_fee: formData.delivery_fee,
             refundable_caution_fee: formData.refundable_caution_fee,
             total,
+            selected_account: formData.selected_account || 1,
           })
           .select()
           .single();
@@ -355,6 +366,7 @@ function App() {
                   invoiceNumber={invoiceNumber}
                   invoiceData={formData}
                   businessInfo={businessInfo}
+                  onAccountChange={(account) => setFormData({ ...formData, selected_account: account })}
                 />
               </div>
             </div>
