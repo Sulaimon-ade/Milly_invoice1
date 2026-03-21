@@ -7,6 +7,11 @@ interface InvoiceFormProps {
 }
 
 export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
+  const calculateVAT = (items: InvoiceFormItem[]) => {
+    const subtotal = items.reduce((sum, item) => sum + item.total_price, 0);
+    return subtotal * 0.075; // 7.5%
+  };
+
   const addItem = () => {
     const newItem: InvoiceFormItem = {
       id: crypto.randomUUID(),
@@ -15,30 +20,44 @@ export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
       price_per_item: 0,
       total_price: 0,
     };
+
+    const updatedItems = [...formData.items, newItem];
+    const vat = calculateVAT(updatedItems);
+
     onChange({
       ...formData,
-      items: [...formData.items, newItem],
+      items: updatedItems,
+      vat,
     });
   };
 
   const removeItem = (id: string) => {
+    const updatedItems = formData.items.filter((item) => item.id !== id);
+    const vat = calculateVAT(updatedItems);
+
     onChange({
       ...formData,
-      items: formData.items.filter((item) => item.id !== id),
+      items: updatedItems,
+      vat,
     });
   };
 
   const updateItem = (id: string, updates: Partial<InvoiceFormItem>) => {
+    const updatedItems = formData.items.map((item) => {
+      if (item.id === id) {
+        const updated = { ...item, ...updates };
+        updated.total_price = updated.quantity * updated.price_per_item;
+        return updated;
+      }
+      return item;
+    });
+
+    const vat = calculateVAT(updatedItems);
+
     onChange({
       ...formData,
-      items: formData.items.map((item) => {
-        if (item.id === id) {
-          const updated = { ...item, ...updates };
-          updated.total_price = updated.quantity * updated.price_per_item;
-          return updated;
-        }
-        return item;
-      }),
+      items: updatedItems,
+      vat,
     });
   };
 
@@ -120,7 +139,7 @@ export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
         </div>
 
         <div className="space-y-3">
-          {formData.items.map((item, index) => (
+          {formData.items.map((item) => (
             <div
               key={item.id}
               className="grid grid-cols-12 gap-3 items-end p-4 bg-purple-50 rounded-lg"
@@ -145,7 +164,11 @@ export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
                   type="number"
                   min="1"
                   value={item.quantity}
-                  onChange={(e) => updateItem(item.id, { quantity: parseInt(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    updateItem(item.id, {
+                      quantity: parseInt(e.target.value) || 0,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
@@ -158,7 +181,11 @@ export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
                   min="0"
                   step="0.01"
                   value={item.price_per_item}
-                  onChange={(e) => updateItem(item.id, { price_per_item: parseFloat(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    updateItem(item.id, {
+                      price_per_item: parseFloat(e.target.value) || 0,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
@@ -202,7 +229,9 @@ export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
               min="0"
               step="0.01"
               value={formData.discount}
-              onChange={(e) => updateField('discount', parseFloat(e.target.value) || 0)}
+              onChange={(e) =>
+                updateField('discount', parseFloat(e.target.value) || 0)
+              }
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="0.00"
             />
@@ -216,7 +245,9 @@ export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
               min="0"
               step="0.01"
               value={formData.delivery_fee}
-              onChange={(e) => updateField('delivery_fee', parseFloat(e.target.value) || 0)}
+              onChange={(e) =>
+                updateField('delivery_fee', parseFloat(e.target.value) || 0)
+              }
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="0.00"
             />
@@ -230,9 +261,25 @@ export function InvoiceForm({ formData, onChange }: InvoiceFormProps) {
               min="0"
               step="0.01"
               value={formData.refundable_caution_fee}
-              onChange={(e) => updateField('refundable_caution_fee', parseFloat(e.target.value) || 0)}
+              onChange={(e) =>
+                updateField(
+                  'refundable_caution_fee',
+                  parseFloat(e.target.value) || 0
+                )
+              }
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="0.00"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              VAT (7.5%) ($)
+            </label>
+            <input
+              type="number"
+              value={formData.vat}
+              readOnly
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100"
             />
           </div>
         </div>
